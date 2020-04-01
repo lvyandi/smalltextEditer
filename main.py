@@ -7,34 +7,42 @@
 # Date : 2020/3/27
 # Description :
 
+from PyQt5.Qt import QWidget, QTextEdit, QPushButton, QTextCursor, QApplication
+from PyQt5.QtCore import Qt
+
+from overriding.textedit import MyTextEdit
 
 
-from PyQt5.Qt import *
 class MyWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle('QTextEdit_文本光标')
+        self.setWindowTitle('ds')
         self.resize(500, 500)
         self.iniUI()
 
     def iniUI(self):
-        te = QTextEdit(self)
+        te = MyTextEdit(self)
         self.te = te
         te.resize(self.width() * 7 / 8, self.height() * 7 / 8)
         te.move((self.width() - te.width()) / 2, 2)
         te.setStyleSheet('background-color:white;font-size:20px')
         te.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
-        btn = QPushButton(self)
-        self.btn = btn
-        self.btn_w = self.width() / 3
-        self.btn_h = self.height() * 3 / 32
-        self.btn.resize(self.btn_w, self.btn_h)
-        self.btn_x = (self.width() - self.btn_w) / 2
-        self.btn_y = self.height() * 7 / 8 + (self.height() / 8 - self.btn_h) / 2
-        self.btn.setText('测试按钮')
-        self.btn.setStyleSheet('font-size:30px')
-        self.btn.move(self.btn_x, self.btn_y)
+        self.setFocusPolicy(Qt.StrongFocus)
+
+
+
+
+        # btn = QPushButton(self)
+        # self.btn = btn
+        # self.btn_w = self.width() / 3
+        # self.btn_h = self.height() * 3 / 32
+        # self.btn.resize(self.btn_w, self.btn_h)
+        # self.btn_x = (self.width() - self.btn_w) / 2
+        # self.btn_y = self.height() * 7 / 8 + (self.height() / 8 - self.btn_h) / 2
+        # self.btn.setText('    ')
+        # self.btn.setStyleSheet('font-size:30px')
+        # self.btn.move(self.btn_x, self.btn_y)
 
     def textChoose(self):
         tc = self.te.textCursor()
@@ -67,7 +75,6 @@ class MyWindow(QWidget):
         tc.movePosition(cursor_pos,QTextCursor.MoveAnchor)
         self.te.setTextCursor(tc)  # 修改完光标之后 还得反向设置回文本编辑器te
 
-    ################################################################操作 所选择的文本
     def textGet_choosen(self):
         tc = self.te.textCursor()
         print(tc.selectedText())  # 打印出所选择的文本
@@ -87,12 +94,17 @@ class MyWindow(QWidget):
         # tc.removeSelectedText()
         # self.te.setFocus()
 
-    ##########################################################删除 特定文本（纯代码操作删除）
     def textDelete(self):
         tc = self.te.textCursor()
         tc.deleteChar()  # 删除光标右边的文本 相当于delete
         tc.deletePreviousChar()  # 删除光标左边的文本，相当于Backspace
         self.te.setFocus()
+
+    def keyPressEvent(self, event):
+        print(event.key())
+        print(event)
+        if event.key() == Qt.Key_F1:
+            print('hhh')
 
 
 if __name__ == '__main__':
@@ -101,6 +113,7 @@ if __name__ == '__main__':
     win = MyWindow()
 
     # win.btn.clicked.connect(win.textGet_choosen)
-    win.btn.clicked.connect(win.textChoose)
+    # win.btn.clicked.connect(win.textChoose)
     win.show()
+
     sys.exit(app.exec_())
